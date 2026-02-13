@@ -1,66 +1,125 @@
 // script.js
 (function(){
-  const input = document.getElementById('dateInput');
-  const btn = document.getElementById('proceedBtn');
+  const passwordInput = document.getElementById('passwordInput');
+  const loginBtn = document.getElementById('loginBtn');
   const msg = document.getElementById('message');
+  const loginCard = document.getElementById('loginCard');
+  const questionArea = document.getElementById('questionArea');
+  const yesBtn = document.getElementById('yesBtn');
+  const noBtn = document.getElementById('noBtn');
 
-  // İstenilen doğru tarih
-  const TARGET = '06.09.2025';
-  const TARGET_DIGITS = '06092025';
-
-  function validateDateFormat(value){
-    // GG.AA.YYYY veya GG/AA/YYYY biçimi
-    const re = /^\d{2}[./]\d{2}[./]\d{4}$/;
-    return re.test(value.trim());
-  }
+  const TARGET_PASSWORD = '25112024';
 
   function showMessage(text){
     msg.textContent = text;
   }
 
   function shakeCard(){
-    const card = document.querySelector('.card');
-    if (!card) return;
-    card.classList.remove('shake');
-    void card.offsetWidth; // reflow to restart animation
-    card.classList.add('shake');
-  }
-
-  function openNextPage(){
-    // Şimdilik basit bir ikinci sayfa
-    window.location.href = 'love.html';
+    loginCard.classList.remove('shake');
+    void loginCard.offsetWidth; 
+    loginCard.classList.add('shake');
   }
 
   // Otomatik tarih maskeleme (GG/AA/YYYY)
-  input.addEventListener('input', () => {
-    const digits = input.value.replace(/\D/g, '').slice(0, 8);
+  passwordInput.addEventListener('input', () => {
+    const digits = passwordInput.value.replace(/\D/g, '').slice(0, 8);
     let out = '';
     if (digits.length > 0) out = digits.slice(0, 2);
     if (digits.length >= 3) out += '/' + digits.slice(2, 4);
     if (digits.length >= 5) out += '/' + digits.slice(4, 8);
-    input.value = out;
+    passwordInput.value = out;
   });
 
-  btn.addEventListener('click', () => {
-    const value = input.value.trim();
-    if (!validateDateFormat(value)){
-      showMessage('Lütfen GG.AA.YYYY veya GG/AA/YYYY biçiminde bir tarih gir ♥');
+  function handleLogin(){
+    const value = passwordInput.value.trim().replace(/\D/g, '');
+    
+    if (value === TARGET_PASSWORD) {
+      showMessage('Giriş başarılı...');
+      loginBtn.disabled = true;
+      
+      setTimeout(() => {
+        loginCard.classList.add('hidden');
+        questionArea.classList.remove('hidden');
+      }, 800);
+    } else {
+      showMessage('Hatalı anahtar, tekrar dene ♥');
       shakeCard();
-      return;
+      passwordInput.value = '';
     }
-    if (value.replace(/\D/g, '') !== TARGET_DIGITS){
-      showMessage('Hmm... O tarih değil sanki.');
-      shakeCard();
-      return;
-    }
-    // Küçük bir kalp animasyonu
-    btn.disabled = true;
-    showMessage('Kalplerin kapısı açılıyor...');
-    setTimeout(openNextPage, 900);
+  }
+
+  // Hayır butonunun kaçma mantığı
+  noBtn.addEventListener('mouseover', moveButton);
+  noBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    moveButton();
   });
 
-  // Enter ile devam
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') btn.click();
+  function moveButton() {
+    const yesRect = yesBtn.getBoundingClientRect();
+    const padding = 20; // Ekran kenarlarından minimum mesafe
+    const avoidMargin = 50; // Evet butonundan minimum uzaklık
+    const minMove = 20; // Minimum hareket mesafesi
+    const maxMove = 200; // Maksimum hareket mesafesi
+
+    const currentRect = noBtn.getBoundingClientRect();
+    let x, y, isOverlapping, isOutOfBounds;
+    let attempts = 0;
+
+    do {
+      // 20px ile 200px arasında rastgele bir mesafe ve yön belirle
+      const distanceX = (Math.random() * (maxMove - minMove) + minMove) * (Math.random() < 0.5 ? -1 : 1);
+      const distanceY = (Math.random() * (maxMove - minMove) + minMove) * (Math.random() < 0.5 ? -1 : 1);
+      
+      x = currentRect.left + distanceX;
+      y = currentRect.top + distanceY;
+
+      // Ekran dışına çıkma kontrolü (Kaybolmaması için)
+      isOutOfBounds = (
+        x < padding || 
+        x > window.innerWidth - noBtn.offsetWidth - padding ||
+        y < padding || 
+        y > window.innerHeight - noBtn.offsetHeight - padding
+      );
+
+      // Evet butonu ile çakışma kontrolü
+      const noRect = {
+        left: x,
+        top: y,
+        right: x + noBtn.offsetWidth,
+        bottom: y + noBtn.offsetHeight
+      };
+
+      isOverlapping = !(
+        noRect.right < yesRect.left - avoidMargin || 
+        noRect.left > yesRect.right + avoidMargin || 
+        noRect.bottom < yesRect.top - avoidMargin || 
+        noRect.top > yesRect.bottom + avoidMargin
+      );
+
+      attempts++;
+    } while ((isOverlapping || isOutOfBounds) && attempts < 50);
+    
+    // Eğer uygun yer bulunamazsa (köşeye sıkışma vb.), güvenli bir alana yerleştir
+    if (attempts >= 50) {
+      x = Math.max(padding, Math.min(x, window.innerWidth - noBtn.offsetWidth - padding));
+      y = Math.max(padding, Math.min(y, window.innerHeight - noBtn.offsetHeight - padding));
+    }
+
+    noBtn.style.position = 'fixed';
+    noBtn.style.left = `${x}px`;
+    noBtn.style.top = `${y}px`;
+    noBtn.style.zIndex = '1000';
+  }
+
+  // Evet butonuna basınca love.html'e yönlendir
+  yesBtn.addEventListener('click', () => {
+    window.location.href = 'love.html';
+  });
+
+  loginBtn.addEventListener('click', handleLogin);
+
+  passwordInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') handleLogin();
   });
 })();

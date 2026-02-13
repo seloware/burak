@@ -2,42 +2,40 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bizim Hikayemiz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+  <title>Seni Seviyorum</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#0f0e17; --text:#fffffe; --muted:#a7a9be; --primary:#ff4d6d; --primary-2:#ff758f; --accent:#f9c74f;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0; color:var(--text); font-family:"Inter", system-ui; background-image:url('resim/burakk.jpeg'); background-repeat:repeat-y; background-position:center top; background-size:cover; animation:bgScroll 60s linear infinite}
-    .wrap{max-width:900px; margin:0 auto; padding:48px 24px}
-    .header{display:flex; align-items:flex-end; gap:16px; margin-bottom:24px}
-    .header svg{width:44px; color:var(--primary)}
-    h1{margin:0; font-family:"Great Vibes", cursive; font-size:68px}
-    p.lead{margin:8px 0 28px; color:#ffffff; font-weight:700; text-align:center}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:24px; backdrop-filter:blur(8px)}
-    .coming{color:#ffd6dd}
-     a.btn{display:inline-block; margin-top:18px; padding:12px 16px; border-radius:12px; background:linear-gradient(135deg, var(--primary), var(--primary-2)); color:white; text-decoration:none; font-weight:700}
-     .love-note{color:#ffffff; text-align:center; font-weight:700; font-size:28px; margin-top:16px}
-     @keyframes bgScroll{
-       from{background-position:center 0}
-       to{background-position:center 2000px}
-     }
-   </style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="wrap">
-    <div class="header">
-      <svg viewBox="0 0 32 29" xmlns="http://www.w3.org/2000/svg"><path d="M23.6 0c-2.6 0-4.9 1.4-7.6 4.2C13.3 1.4 11 0 8.4 0 3.8 0 0 3.8 0 8.4c0 8.8 16 20.6 16 20.6S32 17.2 32 8.4C32 3.8 28.2 0 23.6 0z" fill="currentColor"/></svg>
-      <h1>Bizim Hikayemiz</h1>
+  <div id="resultArea" class="result-area">
+    <div class="gif-wrapper">
+      <img src="resim/gif.gif" alt="Özel GIF 1" id="gif1" class="fullscreen-gif active" />
+      <img src="resim/gif1.gif" alt="Özel GIF 2" id="gif2" class="fullscreen-gif" />
     </div>
-    <p class="lead">06.09.2025 ile başlayan, kalplerimizi birleştiren hikayemizin ilk sayfası 💞</p>
-     <p class="love-note">iyi ki varsın çok seviyorum pıtpıtım🤎😘</p>
-
+    <h2 class="result-text">Seni Çok Seviyorum!</h2>
   </div>
+
+  <script>
+    (function(){
+      const gif1 = document.getElementById('gif1');
+      const gif2 = document.getElementById('gif2');
+      let current = 1;
+
+      setInterval(() => {
+        if (current === 1) {
+          gif1.classList.remove('active');
+          gif2.classList.add('active');
+          current = 2;
+        } else {
+          gif2.classList.remove('active');
+          gif1.classList.add('active');
+          current = 1;
+        }
+      }, 5000);
+    })();
+  </script>
 </body>
 </html>

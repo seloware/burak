@@ -30,7 +30,7 @@
     <svg class="float-heart h16" viewBox="0 0 32 29" xmlns="http://www.w3.org/2000/svg"><path d="M23.6 0c-2.6 0-4.9 1.4-7.6 4.2C13.3 1.4 11 0 8.4 0 3.8 0 0 3.8 0 8.4c0 8.8 16 20.6 16 20.6S32 17.2 32 8.4C32 3.8 28.2 0 23.6 0z" fill="currentColor"/></svg>
   </div>
 
-  <main class="card">
+  <main class="card" id="loginCard">
     <div class="heart-wrap" aria-hidden="true">
       <svg class="big-heart" viewBox="0 0 64 58" xmlns="http://www.w3.org/2000/svg" role="img">
         <title>Kalp</title>
@@ -39,19 +39,25 @@
       <div class="glow"></div>
     </div>
 
-    <h1 class="title">Dünyamızın güzelleştiği o özel tarih...</h1>
-
-
+    <h1 class="title">Hoş Geldin</h1>
+    <p class="subtitle">Devam etmek için giriş yapmalısın</p>
 
     <div class="input-row">
-      <input id="dateInput" type="text" inputmode="numeric" aria-label="Dünyamızın güzelleştiği tarih" />
-      <button id="proceedBtn" class="btn">Devam</button>
+      <input id="passwordInput" type="text" inputmode="numeric" placeholder="GG/AA/YYYY" aria-label="Giriş Tarihi" />
+      <button id="loginBtn" class="btn">Giriş Yap</button>
     </div>
-    <div class="format-hint">Tarih (GG/AA/YYYY)</div>
     <div id="message" class="message" aria-live="polite"></div>
-
-
   </main>
+
+  <div id="questionArea" class="question-area hidden">
+    <div class="card">
+      <h2 class="question-text">Beni seviyor musun?</h2>
+      <div class="btn-group">
+        <button id="yesBtn" class="btn btn-yes">Evet</button>
+        <button id="noBtn" class="btn btn-no">Hayır</button>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
